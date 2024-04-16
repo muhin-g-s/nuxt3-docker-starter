@@ -1,0 +1,20 @@
+version: "3.3"
+# Указываем раздел со связанными сервисами
+
+services:
+  nginx:
+    depends_on:
+      - nuxt
+    image: nginx:latest
+    ports:
+      - '80:80'
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./logs:/var/log/nginx/
+    restart: always
+
+  nuxt:
+    build: ./nuxt
+    expose:
+      - '3000'
+    restart: always
