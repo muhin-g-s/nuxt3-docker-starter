@@ -1,20 +1,28 @@
 version: "3.3"
-# Указываем раздел со связанными сервисами
 
 services:
   nginx:
     depends_on:
-      - nuxt
+      - web
+      - apache
     image: nginx:latest
     ports:
-      - '81:81'
+      - '80:80'
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - ./logs:/var/log/nginx/
     restart: always
 
-  nuxt:
-    build: ./nuxt
+  web:
+    build: ./web
     expose:
       - '3000'
     restart: always
+
+  apache:
+    build: ./apache/frontend
+    ports:
+      - 20080:80
+    volumes:
+      - ~/.composer-docker/cache:/root/.composer/cache:delegated
+      - ./:/app
